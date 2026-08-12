@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Skill Search — Design System (Tailwind v4 @theme)
+   Based on design.md: "Verified Signal" direction
+   ============================================================ */
+
+@theme {
+  /* ---------- Neutrals — Graphite ---------- */
+  --color-graphite-950: #15171A;
+  --color-graphite-800: #262B30;
+  --color-graphite-600: #4B525A;
+  --color-graphite-400: #8B929A;
+  --color-graphite-200: #DDE1E5;
+  --color-surface: #FFFFFF;
+  --color-canvas: #F4F5F7;
+
+  /* ---------- Signal — Primary Accent (teal) ---------- */
+  --color-signal-600: #0F8B8D;
+  --color-signal-400: #3DBFC0;
+  --color-signal-100: #DFF3F3;
+
+  /* ---------- AI Layer — only for AI-generated output ---------- */
+  --color-ai-600: #7458E0;
+  --color-ai-100: #ECE7FB;
+
+  /* ---------- Achievement — Leaderboard only ---------- */
+  --color-gold: #C79A3D;
+  --color-silver: #9AA0A6;
+  --color-bronze: #A5663B;
+
+  /* ---------- Semantic ---------- */
+  --color-success: #3F8F4F;
+  --color-warning: #C15A2E;
+  --color-error: #C0392B;
+
+  /* ---------- Typography ---------- */
+  --font-logo: "Outfit", system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-body: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* ---------- Border Radius ---------- */
+  --radius-button: 6px;
+  --radius-card: 10px;
+  --radius-pill: 9999px;
+
+  /* ---------- Shadows ---------- */
+  --shadow-card-hover: 0 4px 12px rgba(21, 23, 26, 0.06);
+  --shadow-modal: 0 8px 32px rgba(21, 23, 26, 0.12);
+}
+
+/* ============================================================
+   Base Styles
+   ============================================================ */
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-graphite-950);
+  background-color: var(--color-canvas);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus ring — signal-400 on every interactive element */
+*:focus-visible {
+  outline: 2px solid var(--color-signal-400);
+  outline-offset: 2px;
+}
+
+/* Reduced motion — per design.md §9 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   Scrollbar (subtle, matches graphite palette)
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-graphite-200);
+  border-radius: var(--radius-pill);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-graphite-400);
+}

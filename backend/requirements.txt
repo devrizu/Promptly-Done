@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pydantic
+celery
+redis
+supabase
+sentence-transformers
+google-genai
+python-multipart
+python-dotenv
