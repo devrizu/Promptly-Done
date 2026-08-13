@@ -1,4 +1,4 @@
-import { useState, useEffect, type FormEvent } from 'react'
+import { useState, useEffect, useRef, type FormEvent } from 'react'
 import { supabase } from '../lib/supabase'
 import { useSearchParams, Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
@@ -6,7 +6,7 @@ import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { Input } from '../components/ui/Input'
 import { Avatar } from '../components/ui/Avatar'
-import { Send, MessageSquare } from 'lucide-react'
+import { Send, MessageSquare, Sparkles } from 'lucide-react'
 
 // Basic types for the messaging UI
 interface Message {
@@ -42,6 +42,15 @@ export function MessagesPage() {
   const [newMessage, setNewMessage] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [isSending, setIsSending] = useState(false)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
 
   const draftMessage = searchParams.get('draft')
   
@@ -160,6 +169,7 @@ export function MessagesPage() {
               }
               return next
             })
+            window.dispatchEvent(new Event('messages_read'))
           }
         }
       } catch (error) {
@@ -298,13 +308,14 @@ export function MessagesPage() {
                       {msg.content}
                     </div>
                     {msg.ai_drafted && isMe && (
-                      <span className="text-[10px] text-ai-600 mt-1 font-medium bg-ai-50 px-1.5 py-0.5 rounded-sm">
-                        AI Drafted
+                      <span className="text-[10px] text-graphite-400 mt-1 flex items-center gap-1">
+                        <Sparkles size={10} /> AI Drafted
                       </span>
                     )}
                   </div>
                 )
               })}
+              <div ref={messagesEndRef} />
             </div>
 
             {/* Chat Input */}

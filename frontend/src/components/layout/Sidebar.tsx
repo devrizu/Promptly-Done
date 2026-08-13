@@ -73,13 +73,18 @@ export function Sidebar({ isPinned, onTogglePin }: SidebarProps) {
     }
     fetchUnread()
     
-    const channel = supabase.channel('messages_changes')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `receiver_id=eq.${appUser.id}` }, payload => {
-         setUnreadCount(prev => prev + 1)
-      })
+      const channel = supabase.channel('messages_changes')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `receiver_id=eq.${appUser.id}` }, _payload => {
+           setUnreadCount(prev => prev + 1)
+        })
       .subscribe()
+
+    window.addEventListener('messages_read', fetchUnread)
       
-    return () => { supabase.removeChannel(channel) }
+    return () => { 
+      supabase.removeChannel(channel)
+      window.removeEventListener('messages_read', fetchUnread)
+    }
   }, [appUser])
 
   return (
