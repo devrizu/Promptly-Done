@@ -216,6 +216,22 @@ export function MessagesPage() {
           }
           return newConvos
         })
+
+        // Trigger push notification
+        try {
+          const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+          fetch(`${API_URL}/api/notifications/notify`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              receiver_id: activeUserId,
+              title: `New message from ${appUser?.user_metadata?.full_name || 'someone'}`,
+              body: data.content
+            })
+          }).catch(err => console.error('Error triggering push:', err))
+        } catch (e) {
+          // Ignore
+        }
       }
     } catch (error) {
       console.error('Error sending message:', error)

@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 import urllib.request
 import re
+from pywebpush import webpush, WebPushException
 
 # Load environment variables
 load_dotenv()
@@ -33,6 +34,9 @@ if not gemini_api_key:
 else:
     client = genai.Client(api_key=gemini_api_key)
 
+VAPID_PRIVATE_KEY = os.getenv("VAPID_PRIVATE_KEY")
+VAPID_SUBJECT = os.getenv("VAPID_SUBJECT")
+
 app = FastAPI(title="TrueSkills AI API")
 
 app.add_middleware(
@@ -46,6 +50,69 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+class PushSubscriptionModel(BaseModel):
+    user_id: str
+    endpoint: str
+    p256dh: str
+    auth: str
+
+class NotificationPayload(BaseModel):
+    receiver_id: str
+    title: str
+    body: str
+
+@app.post("/api/notifications/subscribe")
+async def subscribe_notification(sub: PushSubscriptionModel):
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase not configured")
+    
+    data = {
+        "user_id": sub.user_id,
+        "endpoint": sub.endpoint,
+        "p256dh": sub.p256dh,
+        "auth": sub.auth
+    }
+    
+    res = supabase.table("push_subscriptions").select("*").eq("endpoint", sub.endpoint).execute()
+    if len(res.data) > 0:
+        return {"status": "already subscribed"}
+        
+    supabase.table("push_subscriptions").insert(data).execute()
+    return {"status": "success"}
+
+@app.post("/api/notifications/notify")
+async def send_notification(payload: NotificationPayload):
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase not configured")
+        
+    res = supabase.table("push_subscriptions").select("*").eq("user_id", payload.receiver_id).execute()
+    subs = res.data
+    
+    if not subs:
+        return {"status": "no subscriptions found"}
+        
+    for sub in subs:
+        try:
+            subscription_info = {
+                "endpoint": sub["endpoint"],
+                "keys": {
+                    "p256dh": sub["p256dh"],
+                    "auth": sub["auth"]
+                }
+            }
+            webpush(
+                subscription_info=subscription_info,
+                data=json.dumps({"title": payload.title, "body": payload.body}),
+                vapid_private_key=VAPID_PRIVATE_KEY,
+                vapid_claims={"sub": VAPID_SUBJECT}
+            )
+        except WebPushException as ex:
+            print("Web push failed:", ex)
+            if ex.response and ex.response.status_code in [404, 410]:
+                supabase.table("push_subscriptions").delete().eq("id", sub["id"]).execute()
+                
+    return {"status": "success", "notified": len(subs)}
 
 @app.get("/")
 def read_root():

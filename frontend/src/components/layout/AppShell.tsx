@@ -2,8 +2,10 @@ import { Outlet, Navigate } from 'react-router-dom'
 import { useState } from 'react'
 import { Sidebar } from './Sidebar'
 import { useAuth } from '../../contexts/AuthContext'
+import { usePushNotifications } from '../../hooks/usePushNotifications'
 
 export function AppShell() {
+  usePushNotifications()
   const { appUser } = useAuth()
   const [isSidebarPinned, setIsSidebarPinned] = useState(false)
   
