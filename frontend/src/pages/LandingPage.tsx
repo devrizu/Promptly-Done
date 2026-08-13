@@ -185,6 +185,10 @@ export function LandingPage() {
             <img src="/logo.png" alt="TrueSkills Logo" className="h-6 grayscale opacity-80" />
             <span className="text-lg font-logo font-bold text-white">TrueSkills</span>
           </Link>
+          <div className="flex gap-6 text-sm">
+            <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+          </div>
           <p className="text-sm">© {new Date().getFullYear()} TrueSkills. All rights reserved.</p>
         </div>
       </footer>
