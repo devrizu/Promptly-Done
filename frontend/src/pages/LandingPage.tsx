@@ -1,10 +1,11 @@
 import { motion, type Variants } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '../components/ui/Button'
 import { PageTransition } from '../components/layout/PageTransition'
 import { Sparkles, CheckCircle, ShieldCheck, Trophy, Search, ChevronRight } from 'lucide-react'
 
 export function LandingPage() {
+  const navigate = useNavigate()
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: { 
@@ -31,9 +32,9 @@ export function LandingPage() {
             <Link to="/login" className="text-sm font-semibold text-graphite-600 hover:text-graphite-950 transition-colors hidden sm:block">
               Log in
             </Link>
-            <Link to="/signup">
-              <Button size="sm">Get Started</Button>
-            </Link>
+            <Button size="sm" onClick={() => navigate('/signup')}>
+              Get Started
+            </Button>
           </div>
         </div>
       </nav>
@@ -67,17 +68,13 @@ export function LandingPage() {
             </motion.p>
             
             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-              <Link to="/signup">
-                <Button size="lg" className="w-full sm:w-auto shadow-xl shadow-signal-600/20 group">
-                  Start Hiring
-                  <ChevronRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-              <Link to="/signup">
-                <Button variant="secondary" size="lg" className="w-full sm:w-auto">
-                  Join as a Candidate
-                </Button>
-              </Link>
+              <Button size="lg" onClick={() => navigate('/signup')} className="w-full sm:w-auto shadow-xl shadow-signal-600/20 group">
+                Start Hiring
+                <ChevronRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+              </Button>
+              <Button variant="secondary" size="lg" onClick={() => navigate('/signup')} className="w-full sm:w-auto">
+                Join as a Candidate
+              </Button>
             </motion.div>
             
             <motion.div variants={itemVariants} className="mt-10 flex items-center justify-center lg:justify-start gap-6 text-sm text-graphite-500 font-body font-medium">
@@ -174,11 +171,9 @@ export function LandingPage() {
             Join thousands of candidates and companies already using TrueSkills.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/signup">
-              <Button variant="secondary" size="lg" className="w-full sm:w-auto border-none shadow-xl shadow-white/10">
-                Create Free Account
-              </Button>
-            </Link>
+            <Button variant="secondary" size="lg" onClick={() => navigate('/signup')} className="w-full sm:w-auto border-none shadow-xl shadow-white/10">
+              Create Free Account
+            </Button>
           </div>
         </div>
       </section>
