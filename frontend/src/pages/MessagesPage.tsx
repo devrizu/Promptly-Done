@@ -16,6 +16,7 @@ interface Message {
   content: string
   ai_drafted: boolean
   sent_at: string
+  is_read?: boolean
 }
 
 interface Conversation {
@@ -23,6 +24,7 @@ interface Conversation {
   other_user_name: string
   last_message: string
   last_message_at: string
+  unread_count: number
 }
 
 export function MessagesPage() {
@@ -75,8 +77,13 @@ export function MessagesPage() {
                 other_user_id: otherUserId,
                 other_user_name: 'User ' + otherUserId.substring(0, 4), // Fallback name
                 last_message: msg.content,
-                last_message_at: msg.sent_at
+                last_message_at: msg.sent_at,
+                unread_count: 0
               })
+            }
+
+            if (msg.receiver_id === appUser?.id && msg.is_read === false) {
+              convosMap.get(otherUserId)!.unread_count += 1
             }
           }
           
@@ -85,7 +92,8 @@ export function MessagesPage() {
               other_user_id: urlUserId,
               other_user_name: 'New Message', 
               last_message: 'Start a conversation...',
-              last_message_at: new Date().toISOString()
+              last_message_at: new Date().toISOString(),
+              unread_count: 0
             })
           }
 
@@ -139,6 +147,20 @@ export function MessagesPage() {
 
         if (data) {
           setMessages(data as Message[])
+
+          // Mark unread messages as read
+          const unreadIds = data.filter(m => m.receiver_id === appUser?.id && m.is_read === false).map(m => m.id)
+          if (unreadIds.length > 0) {
+            await supabase.from('messages').update({ is_read: true }).in('id', unreadIds)
+            setConversations(prev => {
+              const next = [...prev]
+              const idx = next.findIndex(c => c.other_user_id === activeUserId)
+              if (idx !== -1) {
+                next[idx] = { ...next[idx], unread_count: 0 }
+              }
+              return next
+            })
+          }
         }
       } catch (error) {
         console.error('Error fetching messages:', error)
@@ -222,16 +244,21 @@ export function MessagesPage() {
                 <Avatar name={convo.other_user_name} size="md" />
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-baseline mb-1">
-                    <h4 className="text-sm font-semibold text-graphite-950 truncate">
+                    <h4 className={`text-sm truncate ${convo.unread_count > 0 ? 'font-bold text-graphite-950' : 'font-semibold text-graphite-950'}`}>
                       {convo.other_user_name}
                     </h4>
                     <span className="text-[10px] text-graphite-500 whitespace-nowrap ml-2">
                       {new Date(convo.last_message_at).toLocaleDateString()}
                     </span>
                   </div>
-                  <p className="text-xs text-graphite-600 truncate">
-                    {convo.last_message}
-                  </p>
+                  <div className="flex items-center">
+                    <p className={`text-xs truncate flex-1 ${convo.unread_count > 0 ? 'font-semibold text-graphite-900' : 'text-graphite-600'}`}>
+                      {convo.last_message}
+                    </p>
+                    {convo.unread_count > 0 && (
+                      <div className="w-2 h-2 rounded-full bg-signal-600 shrink-0 ml-2" />
+                    )}
+                  </div>
                 </div>
               </button>
             ))

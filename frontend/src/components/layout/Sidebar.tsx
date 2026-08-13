@@ -14,7 +14,8 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { Avatar } from '../ui/Avatar'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { supabase } from '../../lib/supabase'
 
 interface NavItem {
   path: string
@@ -56,6 +57,30 @@ export function Sidebar({ isPinned, onTogglePin }: SidebarProps) {
 
   const [isHovered, setIsHovered] = useState(false)
   const isExpanded = isPinned || isHovered || mobileOpen
+
+  const [unreadCount, setUnreadCount] = useState(0)
+
+  useEffect(() => {
+    if (!appUser) return
+    const fetchUnread = async () => {
+      const { count } = await supabase
+        .from('messages')
+        .select('*', { count: 'exact', head: true })
+        .eq('receiver_id', appUser.id)
+        .eq('is_read', false)
+      
+      setUnreadCount(count || 0)
+    }
+    fetchUnread()
+    
+    const channel = supabase.channel('messages_changes')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `receiver_id=eq.${appUser.id}` }, payload => {
+         setUnreadCount(prev => prev + 1)
+      })
+      .subscribe()
+      
+    return () => { supabase.removeChannel(channel) }
+  }, [appUser])
 
   return (
     <>
@@ -160,15 +185,25 @@ export function Sidebar({ isPinned, onTogglePin }: SidebarProps) {
                     <Link
                       to={item.path}
                       onClick={() => setMobileOpen(false)}
-                      className={`flex items-center gap-3 px-3 py-2.5 rounded-button transition-colors duration-150 no-underline ${
+                      className={`flex items-center gap-3 px-3 py-2.5 rounded-button transition-colors duration-150 no-underline relative ${
                         isActive
                           ? 'bg-graphite-800 text-signal-400'
                           : 'text-graphite-400 hover:text-white hover:bg-graphite-800/50'
                       } ${isExpanded ? '' : 'justify-center'}`}
                       title={!isExpanded ? item.label : undefined}
                     >
-                      <Icon size={18} className="shrink-0" />
+                      <div className="relative shrink-0">
+                        <Icon size={18} />
+                        {!isExpanded && item.label === 'Messages' && unreadCount > 0 && (
+                          <div className="absolute -top-1 -right-1 w-2 h-2 bg-signal-600 rounded-full" />
+                        )}
+                      </div>
                       {isExpanded && <span className="text-sm font-body truncate">{item.label}</span>}
+                      {isExpanded && item.label === 'Messages' && unreadCount > 0 && (
+                        <div className="ml-auto bg-signal-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
+                          {unreadCount}
+                        </div>
+                      )}
                     </Link>
                   )}
                 </li>
