@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ============================================================
-   Skill Search — Design System (Tailwind v4 @theme)
+   TrueSkills — Design System (Tailwind v4 @theme)
    Based on design.md: "Verified Signal" direction
    ============================================================ */
 
@@ -71,6 +71,7 @@ body {
 
 /* Reduced motion — per design.md §9 */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -86,13 +87,16 @@ body {
 ::-webkit-scrollbar {
   width: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--color-graphite-200);
   border-radius: var(--radius-pill);
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-graphite-400);
 }
