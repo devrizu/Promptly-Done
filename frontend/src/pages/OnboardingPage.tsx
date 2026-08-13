@@ -67,10 +67,10 @@ export function OnboardingPage() {
     <div className="min-h-screen bg-canvas flex flex-col items-center justify-center p-4">
       <div className="bg-surface border border-graphite-200 rounded-card p-8 max-w-2xl w-full text-center shadow-sm">
         <div className="flex justify-center mb-6">
-          <img src="/logo.png" alt="Skillify Logo" className="h-12" />
+          <img src="/logo.png" alt="TrueSkills Logo" className="h-12" />
         </div>
         <h1 className="text-3xl font-display font-bold text-graphite-950 mb-4">
-          Welcome to Skillify!
+          Welcome to TrueSkills!
         </h1>
         <p className="text-graphite-600 font-body mb-8">
           To get started, please tell us how you'll be using the platform.

@@ -1,10 +1,10 @@
 <div align="center">
-  <img src="./frontend/public/logo.png" alt="Skillify Logo" width="80" />
-  <h1>Skillify</h1>
+  <img src="./frontend/public/logo.png" alt="TrueSkills Logo" width="80" />
+  <h1>TrueSkills</h1>
   <p><strong>The New Standard in Hiring. Top 1% Verified by AI.</strong></p>
   
   <p>
-    Skillify bridges the gap between top-tier talent and forward-thinking companies. 
+    TrueSkills bridges the gap between top-tier talent and forward-thinking companies. 
     It replaces traditional resumes with verified skills, coding challenges, and AI-powered semantic matching.
   </p>
 </div>
@@ -57,8 +57,8 @@
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/skillify.git
-   cd skillify
+   git clone https://github.com/yourusername/trueskills.git
+   cd trueskills
    ```
 
 2. **Setup the Backend (FastAPI):**

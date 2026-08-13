@@ -33,7 +33,7 @@ if not gemini_api_key:
 else:
     client = genai.Client(api_key=gemini_api_key)
 
-app = FastAPI(title="Skillify AI API")
+app = FastAPI(title="TrueSkills AI API")
 
 app.add_middleware(
     CORSMiddleware,
@@ -45,7 +45,7 @@ app.add_middleware(
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the Skillify AI backend!"}
+    return {"message": "Welcome to the TrueSkills AI backend!"}
 
 @app.get("/api/ai/health")
 def health_check():
@@ -512,7 +512,7 @@ async def verify_project(req: VerifyProjectRequest):
         
         # Fetch GitHub repo metadata
         api_url = f"https://api.github.com/repos/{owner}/{repo}"
-        gh_req = urllib.request.Request(api_url, headers={'User-Agent': 'Skillify-AI'})
+        gh_req = urllib.request.Request(api_url, headers={'User-Agent': 'TrueSkills-AI'})
         try:
             with urllib.request.urlopen(gh_req) as response:
                 repo_data = json.loads(response.read().decode())

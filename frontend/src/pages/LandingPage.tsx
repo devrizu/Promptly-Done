@@ -24,8 +24,8 @@ export function LandingPage() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-canvas/80 backdrop-blur-md border-b border-graphite-200">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <img src="/logo.png" alt="Skillify Logo" className="h-8" />
-            <span className="text-xl font-logo font-bold text-graphite-950">Skillify</span>
+            <img src="/logo.png" alt="TrueSkills Logo" className="h-8" />
+            <span className="text-xl font-logo font-bold text-graphite-950">TrueSkills</span>
           </Link>
           <div className="flex items-center gap-4">
             <Link to="/login" className="text-sm font-semibold text-graphite-600 hover:text-graphite-950 transition-colors hidden sm:block">
@@ -62,7 +62,7 @@ export function LandingPage() {
             </motion.h1>
             
             <motion.p variants={itemVariants} className="text-lg lg:text-xl text-graphite-600 font-body mb-8 max-w-2xl mx-auto lg:mx-0">
-              Skillify connects top tech talent with forward-thinking companies. 
+              TrueSkills connects top tech talent with forward-thinking companies. 
               We use AI to verify skills, analyze GitHub activity, and uncover your true potential.
             </motion.p>
             
@@ -171,7 +171,7 @@ export function LandingPage() {
             Ready to transform your hiring process?
           </h2>
           <p className="text-xl text-graphite-200 font-body mb-10">
-            Join thousands of candidates and companies already using Skillify.
+            Join thousands of candidates and companies already using TrueSkills.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/signup">
@@ -187,10 +187,10 @@ export function LandingPage() {
       <footer className="bg-graphite-950 text-graphite-400 py-12 px-6 border-t border-graphite-800">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
           <Link to="/" className="flex items-center gap-2">
-            <img src="/logo.png" alt="Skillify Logo" className="h-6 grayscale opacity-80" />
-            <span className="text-lg font-logo font-bold text-white">Skillify</span>
+            <img src="/logo.png" alt="TrueSkills Logo" className="h-6 grayscale opacity-80" />
+            <span className="text-lg font-logo font-bold text-white">TrueSkills</span>
           </Link>
-          <p className="text-sm">© {new Date().getFullYear()} Skillify. All rights reserved.</p>
+          <p className="text-sm">© {new Date().getFullYear()} TrueSkills. All rights reserved.</p>
         </div>
       </footer>
     </PageTransition>

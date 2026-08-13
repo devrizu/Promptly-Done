@@ -1,5 +1,5 @@
 // ============================================================
-// Skillify — TypeScript types matching DATABASE_SCHEMA.md
+// TrueSkills — TypeScript types matching DATABASE_SCHEMA.md
 // ============================================================
 
 export interface AppUser {

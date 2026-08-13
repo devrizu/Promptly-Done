@@ -47,8 +47,8 @@ export function SignupPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex items-center justify-center gap-2.5 mb-8">
-          <img src="/logo.png" alt="Skillify Logo" className="h-10" />
-          <span className="text-2xl font-logo font-bold text-graphite-950">Skillify</span>
+          <img src="/logo.png" alt="TrueSkills Logo" className="h-10" />
+          <span className="text-2xl font-logo font-bold text-graphite-950">TrueSkills</span>
         </div>
 
         {/* Card */}
@@ -57,7 +57,7 @@ export function SignupPage() {
             Create your account
           </h1>
           <p className="text-sm text-graphite-600 font-body text-center mb-6">
-            Join Skillify — it's completely free
+            Join TrueSkills — it's completely free
           </p>
 
           {error && (

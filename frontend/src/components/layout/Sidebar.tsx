@@ -107,8 +107,8 @@ export function Sidebar({ isPinned, onTogglePin }: SidebarProps) {
             className="flex items-center gap-2 no-underline overflow-hidden"
             onClick={() => setMobileOpen(false)}
           >
-            <img src="/logo.png" alt="Skillify Logo" className="h-8 shrink-0" />
-            <span className={`text-lg font-logo font-bold text-white transition-opacity duration-300 ${isExpanded ? 'opacity-100' : 'opacity-0 hidden'}`}>Skillify</span>
+            <img src="/logo.png" alt="TrueSkills Logo" className="h-8 shrink-0" />
+            <span className={`text-lg font-logo font-bold text-white transition-opacity duration-300 ${isExpanded ? 'opacity-100' : 'opacity-0 hidden'}`}>TrueSkills</span>
           </Link>
           {isExpanded && (
             <>

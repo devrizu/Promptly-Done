@@ -33,8 +33,8 @@ export function LoginPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex items-center justify-center gap-2.5 mb-8">
-          <img src="/logo.png" alt="Skillify Logo" className="h-10" />
-          <span className="text-2xl font-logo font-bold text-graphite-950">Skillify</span>
+          <img src="/logo.png" alt="TrueSkills Logo" className="h-10" />
+          <span className="text-2xl font-logo font-bold text-graphite-950">TrueSkills</span>
         </div>
 
         {/* Card */}
