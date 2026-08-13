@@ -100,3 +100,19 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-graphite-400);
 }
+
+/* ============================================================
+   Fallbacks / Polyfills
+   ============================================================ */
+
+@layer utilities {
+  /* Fix for older iPhones (iOS <= 17) where backdrop-filter requires a prefix */
+  .backdrop-blur-md {
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+  .backdrop-blur-xl {
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+  }
+}
