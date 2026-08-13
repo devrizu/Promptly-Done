@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { searchCandidates, getCandidateSummary, draftOutreach } from '../api'
 import { useAuth } from '../contexts/AuthContext'
 import type { RecruiterProfile } from '../types'
@@ -7,6 +7,7 @@ import { supabase } from '../lib/supabase'
 
 export function CandidateSearchPage() {
   const { profile, appUser } = useAuth()
+  const navigate = useNavigate()
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<any[]>([])
   const [isSearching, setIsSearching] = useState(false)
@@ -76,25 +77,7 @@ export function CandidateSearchPage() {
     const content = outreachDrafts[uid]
     if (!content || !appUser?.id) return
 
-    setSendingOutreach(prev => ({ ...prev, [uid]: true }))
-    try {
-      const { error } = await supabase
-        .from('messages')
-        .insert({
-          sender_id: appUser.id,
-          receiver_id: uid,
-          content: content,
-          ai_drafted: true
-        })
-
-      if (error) throw error
-      alert('Message sent successfully!')
-    } catch (error) {
-      console.error(error)
-      alert('Failed to send message.')
-    } finally {
-      setSendingOutreach(prev => ({ ...prev, [uid]: false }))
-    }
+    navigate(`/messages?user_id=${uid}&draft=${encodeURIComponent(content)}`)
   }
 
   return (
@@ -214,10 +197,9 @@ export function CandidateSearchPage() {
                     </div>
                     <button
                       onClick={() => handleSendDM(candidate)}
-                      disabled={sendingOutreach[candidate.user_id]}
-                      className="inline-flex items-center justify-center font-body font-semibold rounded-button bg-signal-600 text-white hover:bg-signal-600/90 active:bg-signal-600/80 text-xs px-4 py-1.5 disabled:opacity-50"
+                      className="inline-flex items-center justify-center font-body font-semibold rounded-button bg-signal-600 text-white hover:bg-signal-600/90 active:bg-signal-600/80 text-xs px-4 py-1.5"
                     >
-                      {sendingOutreach[candidate.user_id] ? 'Sending...' : 'Send DM'}
+                      Review & Send DM
                     </button>
                   </div>
                 )}

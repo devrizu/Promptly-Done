@@ -1,6 +1,6 @@
 import { useState, useEffect, type FormEvent } from 'react'
 import { supabase } from '../lib/supabase'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
@@ -41,6 +41,14 @@ export function MessagesPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [isSending, setIsSending] = useState(false)
 
+  const draftMessage = searchParams.get('draft')
+  
+  useEffect(() => {
+    if (draftMessage) {
+      setNewMessage(draftMessage)
+    }
+  }, [draftMessage])
+
   useEffect(() => {
     if (!appUser) return
 
@@ -78,6 +86,23 @@ export function MessagesPage() {
               other_user_name: 'New Message', 
               last_message: 'Start a conversation...',
               last_message_at: new Date().toISOString()
+            })
+          }
+
+          const otherUserIds = Array.from(convosMap.keys())
+          if (otherUserIds.length > 0) {
+            const { data: sProfiles } = await supabase.from('student_profiles').select('user_id, full_name').in('user_id', otherUserIds)
+            const { data: rProfiles } = await supabase.from('recruiter_profiles').select('user_id, full_name').in('user_id', otherUserIds)
+            
+            sProfiles?.forEach(p => {
+              if (convosMap.has(p.user_id) && p.full_name) {
+                convosMap.get(p.user_id)!.other_user_name = p.full_name
+              }
+            })
+            rProfiles?.forEach(p => {
+              if (convosMap.has(p.user_id) && p.full_name) {
+                convosMap.get(p.user_id)!.other_user_name = p.full_name
+              }
             })
           }
           
@@ -224,10 +249,12 @@ export function MessagesPage() {
           <>
             {/* Chat Header */}
             <div className="p-4 border-b border-graphite-200 flex items-center gap-3 bg-white z-10">
-              <Avatar name={conversations.find(c => c.other_user_id === activeUserId)?.other_user_name || 'User'} size="sm" />
-              <h3 className="font-semibold text-graphite-950">
-                {conversations.find(c => c.other_user_id === activeUserId)?.other_user_name || 'User'}
-              </h3>
+              <Link to={`/profile/${activeUserId}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                <Avatar name={conversations.find(c => c.other_user_id === activeUserId)?.other_user_name || 'User'} size="sm" />
+                <h3 className="font-semibold text-graphite-950 hover:underline">
+                  {conversations.find(c => c.other_user_id === activeUserId)?.other_user_name || 'User'}
+                </h3>
+              </Link>
             </div>
 
             {/* Chat Messages */}

@@ -337,6 +337,7 @@ async def draft_outreach(req: DraftOutreachRequest):
     {json.dumps(req.candidate_data, indent=2)}
     
     Keep it under 150 words, highly personalized based on their skills, and professional.
+    Do not use any markdown formatting (like **bold** or *italics*), and do not include placeholders like (For example *Text*). Provide only the final plain text message ready to be sent.
     """
     
     try:
