@@ -521,6 +521,8 @@ def skill_confidence(req: SkillConfidenceRequest):
         return json.loads(response.text)
     except Exception as e:
         print(f"Error computing skill confidence: {e}")
+        if "RESOURCE_EXHAUSTED" in str(e) or "429" in str(e):
+            return {"confidence_score": 0, "rationale": "AI is currently busy due to high traffic. Please try again later."}
         raise HTTPException(status_code=500, detail=str(e))
 
 class CollaborationSignalsRequest(BaseModel):
@@ -554,6 +556,8 @@ def collaboration_signals(req: CollaborationSignalsRequest):
         return json.loads(response.text)
     except Exception as e:
         print(f"Error generating collaboration signals: {e}")
+        if "RESOURCE_EXHAUSTED" in str(e) or "429" in str(e):
+            return {"signals": ["AI Busy"], "rationale": "AI is currently busy due to high traffic. Please try again later."}
         raise HTTPException(status_code=500, detail=str(e))
 
 class VerifyProjectRequest(BaseModel):
@@ -624,4 +628,6 @@ async def verify_project(req: VerifyProjectRequest):
         
     except Exception as e:
         print("Error verifying project:", e)
+        if "RESOURCE_EXHAUSTED" in str(e) or "429" in str(e):
+            return {"status": "failed", "message": "AI is currently busy due to high traffic. Please try again later."}
         raise HTTPException(status_code=500, detail=str(e))
