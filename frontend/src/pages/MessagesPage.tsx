@@ -28,7 +28,7 @@ interface Conversation {
 }
 
 export function MessagesPage() {
-  const { appUser } = useAuth()
+  const { appUser, profile } = useAuth()
   
   const [searchParams] = useSearchParams()
   const urlUserId = searchParams.get('user_id')
@@ -225,7 +225,7 @@ export function MessagesPage() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               receiver_id: activeUserId,
-              title: `New message from ${appUser?.user_metadata?.full_name || 'someone'}`,
+              title: `New message from ${profile?.full_name || 'someone'}`,
               body: data.content
             })
           }).catch(err => console.error('Error triggering push:', err))
