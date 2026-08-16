@@ -44,7 +44,7 @@ __pycache__/
 venv/
 .venv/
 
-# Antigravity Rules
+# Agent Rules
 .agents/
 env/
 
